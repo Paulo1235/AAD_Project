@@ -8,7 +8,7 @@ const port = process.env.PORTSERVER;
 const sql = require("mssql");
 
 const config = {
-  user: process.env.USERNAME,
+  user: "Paulo",
   password: process.env.PASSWORD,
   server: process.env.SERVER_NAME,
   database: process.env.DATABASE,
