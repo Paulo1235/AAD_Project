@@ -1,0 +1,3 @@
+    SERVER_NAME = "localhost"
+    USERNAME = "Marco"
+    PASSWORD = "123"
