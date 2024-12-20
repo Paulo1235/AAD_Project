@@ -1,3 +1,7 @@
-    SERVER_NAME = "localhost"
-    USERNAME = "Marco"
-    PASSWORD = "123"
+SERVER_NAME = "localhost"
+    USERNAME = "Paulo" # mudar isto
+    PASSWORD = "123" # mudar isto
+    DATABASE = "HyperFuel"
+    INSTANCENAME = "MSSQLSERVER" # mudar isto
+    PORTDB = 1433
+    PORTSERVER = 3000
