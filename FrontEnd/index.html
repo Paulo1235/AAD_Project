@@ -117,12 +117,14 @@
         });
     </script>
     <script>
-        // Captura o botão e a div oculta
         const toggleButton = document.getElementById('toggleButton');
         const hiddenDiv = document.getElementById('hiddenDiv');
 
         // Adiciona um evento de clique ao botão
-        toggleButton.addEventListener('click', function () {
+        toggleButton.addEventListener('click', function (e) {
+            // Impede o comportamento padrão (refresh da página)
+            e.preventDefault();
+
             // Alterna entre d-none (oculto) e d-block (visível)
             hiddenDiv.classList.toggle('d-none');
             hiddenDiv.classList.toggle('d-block');
