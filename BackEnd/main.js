@@ -8,6 +8,9 @@ const sql = require("mssql");
 const colors = require("colors");
 const StatusCodes = require("http-status-codes");
 const checkDatabaseConnection = require ("./database");
+const cors = require("cors");
+
+const vehicleRouter = require("./route/vehicle.route");
 
 const config = {
   user: process.env.USERNAME,
@@ -65,6 +68,13 @@ const server = app.listen(process.env.PORTSERVER, async () => {
   await checkDatabaseConnection();
 
 });
+
+app.use(cors());
+
+// Para processar json
+app.use(express.json());
+
+app.use("/api/v1", vehicleRouter);
 
 app.get(
   "/teste",

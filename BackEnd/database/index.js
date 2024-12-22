@@ -3,26 +3,28 @@ const sql = require("mssql");
 const colors = require("colors");
 const { bold, red, green, yellow, blue, underline } = require("colors");
 
+// const { config } = require("./config");
+
+const config = {
+  user: process.env.USER,
+  password: process.env.PASSWORD,
+  server: process.env.SERVER_NAME,
+  database: process.env.DATABASE,
+  port: parseInt(process.env.PORTDB, 10),
+  options: {
+    encrypt: false,
+    trustServerCertificate: false,
+    enableArithAbort: true,
+    instancename: process.env.INSTANCENAME,
+  },
+};
+
 const checkDatabaseConnection = async () => {
   try {
-    const config = {
-      user: "Hugo2",
-      password: process.env.PASSWORD,
-      server: process.env.SERVER_NAME,
-      database: process.env.DATABASE,
-      options: {
-        encrypt: false,
-        trustServerCertificate: false,
-        enableArithAbourt: true,
-        instancename: process.env.INSTANCENAME,
-      },
-      port: parseInt(process.env.PORTDB, 10),
-    };
-
     await sql.connect(config).then((data) => {
       //TODO Tenho de ver como se obtém o nome do servidor e da base de dados
-      const server = process.env.SERVER_NAME;
-      const database = process.env.DATABASE;
+      const server = config.server;
+      const database = config.database;
 
       console.log(
         underline(bold(green(`Base de dados conectada com sucesso`))) +
