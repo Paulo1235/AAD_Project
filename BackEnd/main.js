@@ -4,11 +4,13 @@
 const express = require("express");
 require('dotenv').config();
 const app = express();
-const port = process.env.PORTSERVER;
 const sql = require("mssql");
+const colors = require("colors");
+const StatusCodes = require("http-status-codes");
+const checkDatabaseConnection = require ("./database");
 
 const config = {
-  user: "Paulo",
+  user: process.env.USERNAME,
   password: process.env.PASSWORD,
   server: process.env.SERVER_NAME,
   database: process.env.DATABASE,
@@ -24,19 +26,9 @@ const config = {
 const query = "SELECT * FROM [dbo].[Cliente]";
 
 // Função para estabelecer a ligacao à base de dados
-const checkDatabaseConnection = () => {
-  return sql.connect(config)
-    .then(() => "Connection to the database was successful!")
-    .catch((err) => {
-      console.error("Database connection error:", err);
-      throw new Error("Failed to connect to the database.");
-    });
-};
 
 // Funcção para a consulta
-app.get("/", (req, res) => {
-
-
+/* app.get("/", (req, res) => {
     checkDatabaseConnection()
     .then((message) => {
       // Send the connection success message
@@ -61,8 +53,47 @@ app.get("/", (req, res) => {
     .catch((err) => {
       res.status(500).json({ error: err.message });
     });
+}); */
+
+const server = app.listen(process.env.PORTSERVER, async () => {
+  console.log(
+    `\nServidor a correr,`.green +
+      ` Ativo em: ` +
+      `http://localhost:${process.env.PORTSERVER}`.underline.yellow
+  );
+
+  await checkDatabaseConnection();
+
 });
 
-app.listen(port, () => {
-  console.log(`Running at http://localhost:${port}`);
+app.get(
+  "/teste",
+  (req, res, next) => {
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Olá",
+    });
+  }
+);
+
+// Se encontrar alguma rota que não existe
+app.all(
+  "*",
+  (req, res, next) => {
+    const err = new Error(`Rota ${req.originalUrl} não encotnrada`);
+    err.statusCode = StatusCodes.NOT_FOUND;
+    next(err);
+  }
+);
+
+
+// O server não continua a executar após um erro que não foi trarado
+process.on('unhandledRejection', (err) => {
+  console.log(`Erro: `.white + `${err.message}`.red.bold);
+  console.log('\nA encerrar o servidor'.red.bold);
+
+  server.close(() => {
+    process.exit(1);
+  });
 });
+
