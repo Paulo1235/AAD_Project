@@ -11,52 +11,9 @@ const checkDatabaseConnection = require ("./database");
 const cors = require("cors");
 
 const vehicleRouter = require("./route/vehicle.route");
-
-const config = {
-  user: process.env.USERNAME,
-  password: process.env.PASSWORD,
-  server: process.env.SERVER_NAME,
-  database: process.env.DATABASE,
-  options: {
-    encrypt: false,
-    trustServerCertificate: false,
-    enableArithAbourt:true,
-    instancename:process.env.INSTANCENAME,
-  },
-  port: parseInt(process.env.PORTDB, 10)
-};
-
-const query = "SELECT * FROM [dbo].[Cliente]";
-
-// Função para estabelecer a ligacao à base de dados
-
-// Funcção para a consulta
-/* app.get("/", (req, res) => {
-    checkDatabaseConnection()
-    .then((message) => {
-      // Send the connection success message
-      // res.send(message);
-
-    //   // Run the query after confirming the connection
-      sql.connect(config)
-        .then((pool) => {
-          return pool.request().query(query);
-        })
-        .then((result) => {
-          if (result.recordset.length > 0) {
-            res.json(result.recordset); // Send the rows returned
-          } else {
-            res.send("Nothing found in the database.");
-          }
-        })
-        .catch((err) => {
-          res.status(500).json({ error: "Query execution failed", details: err });
-        });
-    })
-    .catch((err) => {
-      res.status(500).json({ error: err.message });
-    });
-}); */
+const refuelRouter = require("./route/refuel.route");
+const otherServiceRouter = require("./route/otherService.route");
+const clientRouter = require("./route/client.route");
 
 const server = app.listen(process.env.PORTSERVER, async () => {
   console.log(
@@ -75,6 +32,9 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/v1", vehicleRouter);
+app.use("/api/v1", refuelRouter);
+app.use("/api/v1", otherServiceRouter);
+app.use("/api/v1", clientRouter);
 
 app.get(
   "/teste",

@@ -68,7 +68,7 @@ const AddVehicle = async (req, res, next) => {
 
     if (result.rowsAffected[0] > 0) {
       res.status(StatusCodes.CREATED).json({
-        sucess: true,
+        success: true,
         message: "Veículo adicionado.",
       });
     }
@@ -81,4 +81,48 @@ const AddVehicle = async (req, res, next) => {
   }
 };
 
-module.exports = { AddVehicle };
+const RemoveVehicle = async (req, res) => {
+  try {
+    const { veiculoId } = req.body;
+
+    if (!veiculoId || isNaN(veiculoId)) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        message: "ID do veiculo inválido.",
+      });
+    }
+
+    const pool = await sql.connect(config);
+
+    const veiculoResultado = await pool.request().query(`
+        SELECT VeiculoID FROM Veiculo WHERE VeiculoID = '${veiculoId}'
+    `);
+
+    // Verifica se o cliente existe
+    if (veiculoResultado.recordset.length === 0) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: "Veículo não existe.",
+      });
+    }
+
+    const resultado = await pool.request().query(`
+        DELETE FROM Veiculo WHERE VeiculoID = ${veiculoId}
+    `);
+
+    if (resultado.rowsAffected[0] > 0) {
+      return res.status(StatusCodes.OK).json({
+        success: true,
+        message: "Veículo removido com sucesso",
+      });
+    }
+  } catch (error) {
+    console.error("Erro ao remover veículo:", error.message);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+module.exports = { AddVehicle, RemoveVehicle };

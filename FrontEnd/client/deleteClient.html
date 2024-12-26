@@ -1,91 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
     <title>HyperFuel</title>
-    <link rel="stylesheet" href="../style.css">
-     <div id="navbar"></div>
-</head>
-<body>
-    <div class="navbar navbar-expand-lg fixed-top" style="background-color: rgba(0, 0, 0, 0.8); ">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="../showResults.html">HyperFuel</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto" style="color: white;">
-                    <li class="nav-item">
-                        <a class="nav-link" href="addOtherService.html">Serviços</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="addRefuel.html">Abastecimento</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="addVehicle.html">Veiculo</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Cliente</a>
-                    </li>
-                </ul>
-            </div>
+    <link rel="stylesheet" href="../style.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <div id="navbar"></div>
+  </head>
+  <body>
+    <div
+      class="navbar navbar-expand-lg fixed-top"
+      style="background-color: rgba(0, 0, 0, 0.8)"
+    >
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../showResults.html">HyperFuel</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto" style="color: white">
+            <li class="nav-item">
+              <a class="nav-link" href="addOtherService.html">Serviços</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="addRefuel.html">Abastecimento</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="addVehicle.html">Veiculo</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Cliente</a>
+            </li>
+          </ul>
         </div>
+      </div>
     </div>
     <div class="container">
-        <div class="row align-items-start">
-            <div class="col"></div>
-            <div class="col-12 col-md-8" style="max-width: 700px;">
-                <h1 class="pt-5 text-center mb-5" style="color: white; font-weight: bold; margin-top: -120px;">HyperFuel - Remover Cliente</h1>
-                <form action="">
-                    <div class="mb-3" style="max-width: 500px; margin: 0 auto;">
-                        <div class="mb-3">
-                            <input type="number" class="form-control mb-3" id="form-id" placeholder="Id para remover">
-                        </div>
-                        <div class="d-flex justify-content-end align-items-center mb-3"">
-                            <button class="btn btn-outline-secondary" style="border-color: #2f662f;color: #ffffff;background-color: #5cb85c; width: 30%; height: 15%; font-size: 170%; font-weight:600;">
-                                Eliminar
-                            </button>
-                        </div>
-                    </div>
-                </form>
+      <div class="row align-items-start">
+        <div class="col"></div>
+        <div class="col-12 col-md-8" style="max-width: 700px">
+          <h1
+            class="pt-5 text-center mb-5"
+            style="color: white; font-weight: bold; margin-top: -120px"
+          >
+            HyperFuel - Remover Cliente
+          </h1>
+          <form action="DELETE" id="removeForm">
+            <div class="mb-3" style="max-width: 500px; margin: 0 auto">
+              <div class="mb-3">
+                <input
+                  type="number"
+                  class="form-control mb-3"
+                  id="form-id"
+                  placeholder="Id para remover"
+                />
+              </div>
+              <div class="d-flex justify-content-end align-items-center mb-3">
+                <button
+                  class="btn btn-outline-secondary"
+                  style="
+                    border-color: #2f662f;
+                    color: #ffffff;
+                    background-color: #5cb85c;
+                    width: 30%;
+                    height: 15%;
+                    font-size: 170%;
+                    font-weight: 600;
+                  "
+                >
+                  Eliminar
+                </button>
+              </div>
             </div>
-            <div class="col"></div>
+          </form>
         </div>
+        <div class="col"></div>
+      </div>
     </div>
     <script>
-        document.querySelectorAll('#a').forEach(item => {
-            item.addEventListener('click', function (e) {
-                e.preventDefault();
-                const selectedText = this.getAttribute('data-value');
-                document.getElementById('dropdownButton').textContent = selectedText;
-            });
-        });
-    </script>
-    <script>
-        document.querySelectorAll('#a1').forEach(item => {
-            item.addEventListener('click', function (e) {
-                e.preventDefault();
-                const selectedText = this.getAttribute('data-value');
-                document.getElementById('dropdownButton1').textContent = selectedText;
-            });
-        });
-    </script>
-    <script>
-        const toggleButton = document.getElementById('toggleButton');
-        const hiddenDiv = document.getElementById('hiddenDiv');
+      $(document).ready(function () {
+        $("#removeForm").submit(function (event) {
+          event.preventDefault();
 
-        // Adiciona um evento de clique ao botão
-        toggleButton.addEventListener('click', function (e) {
-            // Impede o comportamento padrão (refresh da página)
-            e.preventDefault();
+          const clienteId = $("#form-id").val();
 
-            // Alterna entre d-none (oculto) e d-block (visível)
-            hiddenDiv.classList.toggle('d-none');
-            hiddenDiv.classList.toggle('d-block');
+          if (!clienteId) {
+            alert("Preencha todos os campos.");
+            return;
+          }
+
+          // Tem que ser passado como objeto
+          const dados = {
+            clienteId: clienteId,
+          };
+
+          $.ajax({
+            url: "http://localhost:3000/api/v1/remove-client",
+            type: "DELETE",
+            contentType: "application/json",
+            data: JSON.stringify(dados),
+            success: function (response) {
+              console.log("Cliente removido.", response);
+              alert("Cliente removido com sucesso!");
+
+              $("#form-id").val("");
+            },
+            error: function (status, error) {
+              console.error("Erro ao remover cliente.", status, error);
+              alert("Erro ao remover cliente!");
+            },
+          });
         });
+      });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</body>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>

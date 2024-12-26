@@ -6,7 +6,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <title>HyperFuel</title>
     <link rel="stylesheet" href="style.css">
-     <div id="navbar"></div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <div id="navbar"></div>
 </head>
 <body>
     <div class="navbar navbar-expand-lg fixed-top" style="background-color: rgba(0, 0, 0, 0.8); ">
@@ -38,12 +39,8 @@
             <div class="col"></div>
             <div class="col-12 col-md-8" style="max-width: 700px;">
                 <h1 class="pt-5 text-center mb-5" style="color: white; font-weight: bold; margin-top: -50px;">HyperFuel <br> Registar Abastecimento</h1>
-                <form action="">
+                <form action="POST" id="refuelForm">
                     <div class="mb-3" style="max-width: 500px; margin: 0 auto;">
-                        <form>
-                            <div class="mb-3">
-                                <input type="number" class="form-control" id="customerContribuinte" placeholder="Contribuinte">
-                            </div>
                             <div class="mb-3">
                                 <input type="text" class="form-control" id="vehiclePlate" placeholder="Matricula do Veículo">
                             </div>
@@ -56,8 +53,7 @@
                             <div class="mb-3">
                                 <input type="number" class="form-control" id="pump" placeholder="Bomba">
                             </div>
-                        </form>
-                        <div class="d-flex justify-content-end align-items-center mb-3"">
+                        <div class="d-flex justify-content-end align-items-center mb-3">
                             <button class="btn btn-outline-secondary" style="border-color: #2f662f;color: #ffffff;background-color: #5cb85c; width: 30%; height: 15%; font-size: 170%; font-weight:600;">
                                 Registar
                             </button>
@@ -76,6 +72,49 @@
                 document.getElementById('dropdownButton1').textContent = selectedText;
             });
         });
+
+        $(document).ready(function() {
+            $('#refuelForm').submit(function(event) {
+            event.preventDefault();
+
+            const matricula = $('#vehiclePlate').val();
+            const quantidade = $('#fuelQuantity').val();
+            const nomeFuncionario = $('#funcionario').val();
+            const bomba = $('#pump').val();
+
+            const refuelDados = {
+                matricula: matricula,
+                quantidade: quantidade,
+                nomeFuncionario: nomeFuncionario,
+                bomba: bomba
+            };
+
+            if (!matricula || !quantidade || !nomeFuncionario || !bomba) {
+                alert("Preencha todos os campos.");
+                return;
+            }
+
+            $.ajax({
+                url: 'http://localhost:3000/api/v1/add-refuel',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(refuelDados),
+                success: function(response) {
+                    console.log("Abastecimento adicionado.", response);
+                    alert("Abastecimento adicionado com sucesso!");
+
+                    $('#vehiclePlate').val('');
+                    $('#fuelQuantity').val('');
+                    $('#funcionario').val('');
+                    $('#bomba').val('');
+                },
+                error: function(status, error) {
+                    console.error("Erro ao adicionar abastecimento.", status, error);
+                    alert("Erro ao adicionar abastecimento!");
+                }
+            });
+            });
+        })
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>

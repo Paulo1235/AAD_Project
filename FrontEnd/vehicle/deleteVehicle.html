@@ -39,10 +39,10 @@
             <div class="col"></div>
             <div class="col-12 col-md-8" style="max-width: 700px;">
                 <h1 class="pt-5 text-center mb-5 " style="color: white; font-weight: bold; margin-top: -200px;">HyperFuel - Remover Veiculo</h1>
-                <form action="POST" id="vehicleForm">
+                <form action="DELETE" id="removeForm">
                     <div class="mb-3" style="max-width: 500px; margin: 0 auto;">
                             <div class="mb-3">
-                                <input type="number" class="form-control" id="idVeiculo" placeholder="Id para remover">
+                                <input type="number" class="form-control" id="form-id" placeholder="Id para remover">
                             </div>
                         <div class="d-flex justify-content-end align-items-center mb-3">
                             <button type="submit" class="btn btn-outline-secondary" style="border-color: #2f662f;color: #ffffff;background-color: #5cb85c; width: 30%; height: 15%; font-size: 170%; font-weight:600;">
@@ -65,40 +65,35 @@
         });
 
         $(document).ready(function() {
-            $('#vehicleForm').submit(function(event) {
+            $('#removeForm').submit(function(event) {
             event.preventDefault();
 
-            const contribuinte = $('#contribuinteDono').val();
-            const matricula = $('#vehiclePlate').val();
-            const descricao = $('#dropdownButton1').html();
+            const veiculoId = $('#form-id').val();
 
-            const veiculoDados = {
-                contribuinte: contribuinte,
-                matricula: matricula,
-                descricao: descricao
-            };
-
-            if (!contribuinte || !matricula || !descricao) {
+            if (!veiculoId) {
                 alert("Preencha todos os campos.");
                 return;
             }
 
-            $.ajax({
-                url: 'http://localhost:3000/api/v1/add-vehicle',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(veiculoDados),
-                success: function(response) {
-                    console.log("Veículo adicionado.", response);
-                    alert("Veículo adicionado com sucesso!");
+            // Tem que ser passado como objeto
+            const dados = {
+                veiculoId: veiculoId
+            }
 
-                    $('#contribuinteDono').val('');
-                    $('#vehiclePlate').val('');
-                    $('#a1').val('');
+            $.ajax({
+                url: 'http://localhost:3000/api/v1/remove-vehicle',
+                type: 'DELETE',
+                contentType: 'application/json',
+                data: JSON.stringify(dados),
+                success: function(response) {
+                    console.log("Veículo removido.", response);
+                    alert("Veículo removido com sucesso!");
+
+                    $('#form-id').val('');
                 },
                 error: function(status, error) {
-                    console.error("Erro ao adicionar veículo.", status, error);
-                    alert("Erro ao adicionar veículo!");
+                    console.error("Erro ao remover veículo.", status, error);
+                    alert("Erro ao remover veículo!");
                 }
             });
             });
