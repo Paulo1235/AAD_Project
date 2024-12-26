@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <title>HyperFuel</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
      <div id="navbar"></div>
 </head>
 <body>
     <div class="navbar navbar-expand-lg fixed-top" style="background-color: rgba(0, 0, 0, 0.8); ">
         <div class="container-fluid">
-            <a class="navbar-brand" href="showResults.html">HyperFuel</a>
+            <a class="navbar-brand" href="../showResults.html">HyperFuel</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -37,9 +37,12 @@
         <div class="row align-items-start">
             <div class="col"></div>
             <div class="col-12 col-md-8" style="max-width: 700px;">
-                <h1 class="pt-5 text-center mb-5" style="color: white; font-weight: bold; margin-top: -120px;">HyperFuel - Registo Cliente</h1>
+                <h1 class="pt-5 text-center mb-5" style="color: white; font-weight: bold; margin-top: -120px;">HyperFuel - Atualizar Cliente</h1>
                 <form action="">
                     <div class="mb-3" style="max-width: 500px; margin: 0 auto;">
+                        <div class="mb-3">
+                            <input type="number" class="form-control mb-3" id="form-id" placeholder="Id para atualizar">
+                        </div>
                         <input type="text" class="form-control mb-3" id="form-nome" placeholder="Nome Completo">
                         <div class="mb-3">
                             <input type="number" class="form-control mb-3" id="form-contribuinte" placeholder="Contribuinte">
@@ -97,7 +100,7 @@
                         </div>
                         <div class="d-flex justify-content-end align-items-center mb-3"">
                             <button class="btn btn-outline-secondary" style="border-color: #2f662f;color: #ffffff;background-color: #5cb85c; width: 30%; height: 15%; font-size: 170%; font-weight:600;">
-                                Registar
+                                Atualizar
                             </button>
                         </div>
                     </div>
