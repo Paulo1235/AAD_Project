@@ -139,4 +139,103 @@ const RemoveClient = async (req, res) => {
   }
 };
 
-module.exports = { AddClient, RemoveClient };
+
+const UpdateClient = async (req, res, next) => {
+  try {
+    console.log("Body:", req.body);
+
+    const { nome, contribuinteA, contribuinte, contacto, tipoContacto } = req.body;
+
+    const pool = await sql.connect(config);
+
+    // Encontrar o cliente com base no contribuinte
+    const clienteResultado = await pool.request().query(`
+      UPDATE Cliente
+      SET 
+          Nome = '${nome}', 
+          Contribuinte = '${contribuinte}'
+      WHERE 
+          Contribuinte = '${contribuinteA}'
+  `);
+
+  const contactoResultado = await pool.request().query(`
+    UPDATE Contacto
+      SET 
+          Contacto = '${contacto}'
+      WHERE 
+          ContactoID = (
+              SELECT ContactoContactoID
+              FROM Cliente
+              WHERE Contribuinte = '${contribuinte}'
+          );
+    `);
+
+    const tipoContactoResultado = await pool.request().query(`
+      UPDATE TipoContacto
+      SET 
+          DescContacto = '${tipoContacto}'
+      WHERE 
+          TipoContactoID = (
+              SELECT TipoContactoTipoContactoID
+              FROM Contacto
+              WHERE ContactoID = (
+                  SELECT ContactoContactoID
+                  FROM Cliente
+                  WHERE Contribuinte = '${contribuinte}'
+              )
+          );
+
+      `);
+
+    // Verifica se o cliente existe
+    if (clienteResultado.recordset.length !== 0) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: "Erro ao atualizar.",
+      });
+    }
+
+    if (clienteResultado.rowsAffected[0] > 0) {
+      res.status(StatusCodes.CREATED).json({
+        success: true,
+        message: "Cliente atualizado.",
+      });
+    }
+
+    if (contactoResultado.recordset.length !== 0) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: "Erro ao atualizar.",
+      });
+    }
+
+    if (contactoResultado.rowsAffected[0] > 0) {
+      res.status(StatusCodes.CREATED).json({
+        success: true,
+        message: "Contacto atualizado.",
+      });
+    }
+
+    if (tipoContactoResultado.recordset.length !== 0) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: "Erro ao atualizar.",
+      });
+    }
+
+    if (tipoContactoResultado.rowsAffected[0] > 0) {
+      res.status(StatusCodes.CREATED).json({
+        success: true,
+        message: "TipoContacto atualizado.",
+      });
+    }
+  } catch (error) {
+    console.error("Erro ao atualizado cliente:", error.message);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+module.exports = { AddClient, RemoveClient, UpdateClient };
