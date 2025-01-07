@@ -2,26 +2,25 @@ const { StatusCodes } = require("http-status-codes");
 const sql = require("mssql");
 
 const config = {
-    user: process.env.USER,
-    password: process.env.PASSWORD,
-    server: process.env.SERVER_NAME,
-    database: process.env.DATABASE,
-    port: parseInt(process.env.PORTDB, 10),
-    options: {
-      encrypt: false,
-      trustServerCertificate: false,
-      enableArithAbort: true,
-      instancename: process.env.INSTANCENAME,
-    },
-  };
+  user: process.env.USER,
+  password: process.env.PASSWORD,
+  server: process.env.SERVER_NAME,
+  database: process.env.DATABASE,
+  port: parseInt(process.env.PORTDB, 10),
+  options: {
+    encrypt: false,
+    trustServerCertificate: false,
+    enableArithAbort: true,
+    instancename: process.env.INSTANCENAME,
+  },
+};
 
 const AddVehicle = async (req, res, next) => {
   try {
     console.log("Body:", req.body);
-    
+
     const { contribuinte, matricula, descricao } = req.body;
 
-      
     const pool = await sql.connect(config);
 
     // Encontrar o cliente com base no contribuinte
@@ -31,10 +30,10 @@ const AddVehicle = async (req, res, next) => {
 
     // Verifica se o cliente existe
     if (clienteResultado.recordset.length === 0) {
-        return res.status(StatusCodes.NOT_FOUND).json({ 
-            success: false, 
-            message: "Cliente não encontrado." 
-        });
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: "Cliente não encontrado.",
+      });
     }
 
     // Extrai o CID (id do cliente)
@@ -47,10 +46,10 @@ const AddVehicle = async (req, res, next) => {
 
     // Verifica se o tipo de combustível existe
     if (tipoCombustivelResultado.recordset.length === 0) {
-        return res.status(StatusCodes.NOT_FOUND).json({ 
-            success: false, 
-            message: "Tipo de combustível não encontrado." 
-        });
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: "Tipo de combustível não encontrado.",
+      });
     }
 
     // Extrai o TCID (id do tipo de combustível)
@@ -98,7 +97,7 @@ const RemoveVehicle = async (req, res) => {
         SELECT VeiculoID FROM Veiculo WHERE VeiculoID = '${veiculoId}'
     `);
 
-    // Verifica se o cliente existe
+    // Verifica se o veículo existe
     if (veiculoResultado.recordset.length === 0) {
       return res.status(StatusCodes.NOT_FOUND).json({
         success: false,
@@ -125,4 +124,109 @@ const RemoveVehicle = async (req, res) => {
   }
 };
 
-module.exports = { AddVehicle, RemoveVehicle };
+const UpdateVehicle = async (req, res) => {
+  try {
+    const { matricula, novaMatricula, descricao, contribuinte } = req.body;
+
+    if (!matricula) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        message: "Matrícula atual é obrigatória.",
+      });
+    }
+
+    if (!novaMatricula && !descricao && !contribuinte) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        message: "Pelo menos um campo de atualização (nova matrícula, descrição ou contribuinte) é obrigatório.",
+      });
+    }
+
+    const pool = await sql.connect(config);
+
+    const veiculoResultado = await pool.request().query(`
+      SELECT VeiculoID, Matricula, TipoCombustivelTCID, ClienteCID 
+      FROM Veiculo WHERE Matricula = '${matricula}'
+    `);
+
+    if (veiculoResultado.recordset.length === 0) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: "Veículo não encontrado.",
+      });
+    }
+
+    const veiculo = veiculoResultado.recordset[0];
+    
+    let novaMatr = veiculo.Matricula;
+    let novoTipoCombustivelId = veiculo.TipoCombustivelTCID;
+    let novoClienteId = veiculo.ClienteCID;
+
+    // Se nova matrículaç for fornecida substitui a anterior
+    if (novaMatricula) {
+      novaMatr = novaMatricula;
+    }
+
+    if (descricao) {
+      const tipoCombustivelResultado = await pool.request().query(`
+        SELECT TCID FROM TipoCombustivel WHERE Descricao = '${descricao}'
+      `);
+
+      if (tipoCombustivelResultado.recordset.length === 0) {
+        return res.status(StatusCodes.NOT_FOUND).json({
+          success: false,
+          message: "Tipo de combustível não encontrado.",
+        });
+      }
+
+      novoTipoCombustivelId = tipoCombustivelResultado.recordset[0].TCID;
+    }
+
+    if (contribuinte) {
+      const clienteResultado = await pool.request().query(`
+        SELECT CID FROM Cliente WHERE Contribuinte = '${contribuinte}'
+      `);
+
+      if (clienteResultado.recordset.length === 0) {
+        return res.status(StatusCodes.NOT_FOUND).json({
+          success: false,
+          message: "Cliente não encontrado.",
+        });
+      }
+
+      novoClienteId = clienteResultado.recordset[0].CID;
+    }
+
+    const atualizar = `
+      UPDATE Veiculo
+      SET 
+        Matricula = @Matricula,
+        TipoCombustivelTCID = @TipoCombustivelTCID,
+        ClienteCID = @ClienteCID
+      WHERE Matricula = @OldMatricula
+    `;
+
+    const updateResult = await pool.request()
+      .input("Matricula", sql.VarChar, novaMatr)
+      .input("TipoCombustivelTCID", sql.Int, novoTipoCombustivelId)
+      .input("ClienteCID", sql.Int, novoClienteId)
+      .input("OldMatricula", sql.VarChar, matricula)
+      .query(atualizar);
+
+    if (updateResult.rowsAffected[0] > 0) {
+      return res.status(StatusCodes.OK).json({
+        success: true,
+        message: "Veículo atualizado com sucesso.",
+      });
+    }
+
+  } catch (error) {
+    console.error("Erro ao atualizar veículo:", error.message);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+module.exports = { AddVehicle, RemoveVehicle, UpdateVehicle };
