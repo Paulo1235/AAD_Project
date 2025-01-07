@@ -10,6 +10,7 @@ const StatusCodes = require("http-status-codes");
 const checkDatabaseConnection = require ("./database");
 const cors = require("cors");
 
+const showR = require("./route/show.route");
 const vehicleRouter = require("./route/vehicle.route");
 const refuelRouter = require("./route/refuel.route");
 const otherServiceRouter = require("./route/otherService.route");
@@ -35,7 +36,7 @@ app.use("/api/v1", vehicleRouter);
 app.use("/api/v1", refuelRouter);
 app.use("/api/v1", otherServiceRouter);
 app.use("/api/v1", clientRouter);
-
+app.use("/api/v1", showR);
 app.get(
   "/teste",
   (req, res, next) => {

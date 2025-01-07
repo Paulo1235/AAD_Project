@@ -91,6 +91,21 @@
                 matricula++;
                 abastecimentos++;
             });
+            // Falta Colocar os dados nas table rows !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            $.ajax({
+                url: 'http://localhost:3000/api/v1/show-results',
+                type: 'GET',
+                contentType: 'application/json',
+                data: JSON.stringify(veiculoDados),
+                success: function(response) {
+                    console.log("Dados mostrados", response);
+                    alert("Dados mostrados com sucesso!");
+                },
+                error: function(status, error) {
+                    console.error("Erro ao mostrar dados.", status, error);
+                    alert("Erro ao mostrar dados!");
+                }
+            });
         </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </body>
