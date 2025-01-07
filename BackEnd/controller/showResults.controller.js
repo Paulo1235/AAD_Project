@@ -19,25 +19,22 @@ const config = {
 const ShowResults = async (req, res, next) => {
   try {
     const pool = await sql.connect(config);
-    const numeroAbastecimentosResultado = await pool.request().query(`
-        Select Cliente.Nome, Veiculo.Matricula, Count(AbastecimentoID)
-        from Abastecimento
-            Join Veiculo on Veiculo.VeiculoID=Abastecimento.VeiculoVeiculoID
-            Join Cliente on Cliente.CID=Veiculo.ClienteCID
-        Group by Cliente.Nome, Veiculo.Matricula
-    `);
+    
+    const resultado = await pool.request().execute("dbo.ObterDados")
 
-    if (numeroAbastecimentosResultado.recordset.length === 0) {
-        return res.status(StatusCodes.NOT_FOUND).json({ 
-            success: false, 
-            message: "erro." 
-        });
+    if (resultado.recordset.length === 0) {
+      return res.status(StatusCodes.NOT_FOUND).json({ 
+          success: false, 
+          message: "erro." 
+      });
     }
 
-    if (numeroAbastecimentosResultado.rowsAffected[0] > 0) {
+    console.log(resultado.recordset);    
+
+    if (resultado.rowsAffected[0] > 0) {
       res.status(StatusCodes.CREATED).json({
         success: true,
-        message: "mostrado.",
+        data: resultado.recordset
       });
     }
   } catch (error) {
