@@ -229,4 +229,71 @@ const UpdateVehicle = async (req, res) => {
   }
 };
 
-module.exports = { AddVehicle, RemoveVehicle, UpdateVehicle };
+const GetVehicle = async (req, res) => {
+  try {
+    const { matriculaVeiculo } = req.params;
+
+    if (!matriculaVeiculo) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        message: "A matrícula do veículo é obrigatória.",
+      });
+    }
+
+    // Conecta ao banco de dados
+    const pool = await sql.connect(config);
+
+    const veiculoResultado = await pool.request()
+      .input("Matricula", sql.VarChar, matriculaVeiculo)
+      .query(`
+        SELECT VeiculoID, Matricula, TipoCombustivelTCID, ClienteCID 
+        FROM Veiculo
+        WHERE Matricula = @Matricula
+      `);
+
+    if (veiculoResultado.recordset.length === 0) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: "Veículo não encontrado.",
+      });
+    }
+
+    const veiculo = veiculoResultado.recordset[0];
+
+    const tipoCombustivelResultado = await pool.request()
+      .input("TipoCombustivelTCID", sql.Int, veiculo.TipoCombustivelTCID)
+      .query(`
+        SELECT Descricao
+        FROM TipoCombustivel
+        WHERE TCID = @TipoCombustivelTCID
+      `);
+
+    const clienteResultado = await pool.request()
+      .input("ClienteCID", sql.Int, veiculo.ClienteCID)
+      .query(`
+        SELECT Contribuinte
+        FROM Cliente
+        WHERE CID = @ClienteCID
+      `);
+
+    const tipoCombustivel = tipoCombustivelResultado.recordset[0].Descricao;
+    const contribuinte = clienteResultado.recordset[0].Contribuinte;
+
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      data: {
+        Matricula: veiculo.Matricula,
+        TipoCombustivel: tipoCombustivel,
+        ClienteContribuinte: contribuinte,
+      },
+    });
+  } catch (error) {
+    console.error("Erro ao obter os dados do veículo:", error.message);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+module.exports = { AddVehicle, RemoveVehicle, UpdateVehicle, GetVehicle };

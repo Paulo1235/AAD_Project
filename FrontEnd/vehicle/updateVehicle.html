@@ -7,7 +7,7 @@
     <title>HyperFuel</title>
     <link rel="stylesheet" href="../style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-     <div id="navbar"></div>
+    <div id="navbar"></div>
 </head>
 <body>
     <div class="navbar navbar-expand-lg fixed-top" style="background-color: rgba(0, 0, 0, 0.8); ">
@@ -38,42 +38,46 @@
         <div class="row align-items-start">
             <div class="col"></div>
             <div class="col-12 col-md-8" style="max-width: 700px;">
-                <h1 class="pt-5 text-center mb-5 " style="color: white; font-weight: bold; margin-top: -200px;">HyperFuel - Atualizar Veiculo</h1>
-                <form action="POST" id="vehicleForm">
-                    <div class="mb-3" style="max-width: 500px; margin: 0 auto;">
-                            <div class="mb-3">
-                                <input type="number" class="form-control" id="idVeiculo" placeholder="Id para atualizar">
-                            </div>
-                            <div class="mb-3">
-                                <input type="number" class="form-control" id="contribuinteDono" placeholder="Contribuinte do Dono">
-                            </div>
-                            <div class="mb-3">
-                                <input type="text" class="form-control" id="vehiclePlate" placeholder="Matricula do Veículo">
-                            </div>
-                            <button id="dropdownButton1" class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border-color: #2f662f;color: #ffffff;background-color: #5cb85c;">Tipo de Combustível</button>
-                            <ul class="dropdown-menu" id="dropdownMenu">
-                                <li><a class="dropdown-item" id="a1" href="#" data-value="Metano">Metano</a></li>
-                                <li><a class="dropdown-item" id="a1" href="#" data-value="Gasolina Aditivada">Gasolina Aditivada</a></li>
-                                <li><a class="dropdown-item" id="a1" href="#" data-value="Biodiesel">Biodiesel</a></li>
-                                <li><a class="dropdown-item" id="a1" href="#" data-value="Diesel Premium">Diesel Premium</a></li>
-                                <li><a class="dropdown-item" id="a1" href="#" data-value="Etanol">Etanol</a></li>
-                                <li><a class="dropdown-item" id="a1" href="#" data-value="Hidrogenio">Hidrogénio</a></li>
-                                <li><a class="dropdown-item" id="a1" href="#" data-value="Eletrico">Elétrico</a></li>
-                                <li><a class="dropdown-item" id="a1" href="#" data-value="Gasóleo">Gasóleo</a></li>
-                                <li><a class="dropdown-item" id="a1" href="#" data-value="GPL">GPL</a></li>
-                                <li><a class="dropdown-item" id="a1" href="#" data-value="Gasolina">Gasolina</a></li>
-                            </ul>
-                        <div class="d-flex justify-content-end align-items-center mb-3"">
-                            <button type="submit" class="btn btn-outline-secondary" style="border-color: #2f662f;color: #ffffff;background-color: #5cb85c; width: 30%; height: 15%; font-size: 170%; font-weight:600;">
-                                Atualizar
-                            </button>
-                        </div>
+                <h1 class="pt-5 text-center mb-5" style="color: white; font-weight: bold;">HyperFuel - Atualizar Veiculo</h1>
+                <form id="vehicleForm">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="procuraMatricula" placeholder="Matrícula do Veículo">
+                    </div>
+                    <button type="button" id="encontrarVeiculo" class="btn btn-outline-secondary mb-3" style="border-color: #2f662f; color: #ffffff; background-color: #5cb85c; width: 100%;">Encontrar Veículo</button>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="vehiclePlate" placeholder="Matricula do Veículo (Atual)" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="novaMatricula" placeholder="Nova Matrícula do Veículo (Opcional)">
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="contribuinteDono" placeholder="Contribuinte do Dono (Opcional)">
+                    </div>
+                    <button id="dropdownButton1" class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border-color: #2f662f;color: #ffffff;background-color: #5cb85c;">Tipo de Combustível</button>
+                        <ul class="dropdown-menu" id="dropdownMenu">
+                            <li><a class="dropdown-item" id="a1" href="#" data-value="Metano">Metano</a></li>
+                            <li><a class="dropdown-item" id="a1" href="#" data-value="Gasolina Aditivada">Gasolina Aditivada</a></li>
+                            <li><a class="dropdown-item" id="a1" href="#" data-value="Biodiesel">Biodiesel</a></li>
+                            <li><a class="dropdown-item" id="a1" href="#" data-value="Diesel Premium">Diesel Premium</a></li>
+                            <li><a class="dropdown-item" id="a1" href="#" data-value="Etanol">Etanol</a></li>
+                            <li><a class="dropdown-item" id="a1" href="#" data-value="Hidrogenio">Hidrogénio</a></li>
+                            <li><a class="dropdown-item" id="a1" href="#" data-value="Eletrico">Elétrico</a></li>
+                            <li><a class="dropdown-item" id="a1" href="#" data-value="Gasóleo">Gasóleo</a></li>
+                            <li><a class="dropdown-item" id="a1" href="#" data-value="GPL">GPL</a></li>
+                            <li><a class="dropdown-item" id="a1" href="#" data-value="Gasolina">Gasolina</a></li>
+                        </ul>
+
+                    <div class="d-flex justify-content-end align-items-center mb-3">
+                        <button type="submit" class="btn btn-outline-secondary" style="border-color: #2f662f;color: #ffffff;background-color: #5cb85c; width: 30%; height: 15%; font-size: 170%; font-weight:600;">
+                            Atualizar
+                        </button>
                     </div>
                 </form>
             </div>
             <div class="col"></div>
         </div>
     </div>
+
     <script>
         document.querySelectorAll('#a1').forEach(item => {
             item.addEventListener('click', function (e) {
@@ -83,43 +87,80 @@
             });
         });
 
+        document.getElementById('dropdownButton1').addEventListener('click', function () {
+    console.log('Dropdown clicado');
+});
+
         $(document).ready(function() {
-            $('#vehicleForm').submit(function(event) {
-            event.preventDefault();
-
-            const contribuinte = $('#contribuinteDono').val();
-            const matricula = $('#vehiclePlate').val();
-            const descricao = $('#dropdownButton1').html();
-
-            const veiculoDados = {
-                contribuinte: contribuinte,
-                matricula: matricula,
-                descricao: descricao
-            };
-
-            if (!contribuinte || !matricula || !descricao) {
-                alert("Preencha todos os campos.");
-                return;
-            }
-
-            $.ajax({
-                url: 'http://localhost:3000/api/v1/add-vehicle',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(veiculoDados),
-                success: function(response) {
-                    console.log("Veículo adicionado.", response);
-                    alert("Veículo adicionado com sucesso!");
-
-                    $('#contribuinteDono').val('');
-                    $('#vehiclePlate').val('');
-                    $('#a1').val('');
-                },
-                error: function(status, error) {
-                    console.error("Erro ao adicionar veículo.", status, error);
-                    alert("Erro ao adicionar veículo!");
+            $('#encontrarVeiculo').click(function() {
+                const matriculaVeiculo = $('#procuraMatricula').val();
+                
+                if (!matriculaVeiculo) {
+                    alert("A matrícula do veículo é obrigatória!");
+                    return;
                 }
+
+                $.ajax({
+                    url: `http://localhost:3000/api/v1/get-vehicle/${matriculaVeiculo}`,
+                    type: 'GET',
+                    success: function(response) {
+                        if (response.success) {
+                            const veiculo = response.data;
+                            
+                            $('#vehiclePlate').val(veiculo.Matricula);
+                            $('#contribuinteDono').val(veiculo.ClienteContribuinte);
+                            $('#dropdownButton1').html(veiculo.TipoCombustivel);
+                        } else {
+                            alert("Veículo não encontrado!");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Erro ao encontrar o veículo.", status, error);
+                        alert("Erro ao encontrar veículo!");
+                    }
+                });
             });
+
+            $('#vehicleForm').submit(function(event) {
+                event.preventDefault();
+
+                const matricula = $('#vehiclePlate').val();
+                const novaMatricula = $('#novaMatricula').val();
+                const contribuinte = $('#contribuinteDono').val();
+                const descricao = $('#dropdownButton1').html();
+
+                if (!matricula) {
+                    alert("A matrícula do veículo é obrigatória!");
+                    return;
+                }
+
+                const veiculoDados = {
+                    matricula: matricula,
+                    novaMatricula: novaMatricula || undefined,
+                    descricao: descricao || undefined,
+                    contribuinte: contribuinte || undefined
+                };
+
+                $.ajax({
+                    url: 'http://localhost:3000/api/v1/update-vehicle',
+                    type: 'PUT', 
+                    contentType: 'application/json',
+                    data: JSON.stringify(veiculoDados),
+                    success: function(response) {
+                        console.log("Veículo atualizado.", response);
+                        alert("Veículo atualizado com sucesso!");
+
+                        $('#procuraMatricula').val('');
+                        $('#vehiclePlate').val('');
+                        $('#novaMatricula').val('');
+                        $('#contribuinteDono').val('');
+                        $('#dropdownButton1').text('Tipo de Combustível');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Erro ao atualizar o veículo.", status, error);
+                        alert("Erro ao atualizar o veículo!");
+                    }
+                });
             });
         });
     </script>

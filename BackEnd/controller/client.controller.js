@@ -107,19 +107,19 @@ const AddClient = async (req, res, next) => {
 
 const RemoveClient = async (req, res) => {
   try {
-    const { clienteId } = req.body;
+    const { contribuinte } = req.body;
 
-    if (!clienteId || isNaN(clienteId)) {
+    if (!contribuinte || isNaN(contribuinte)) {
       return res.status(StatusCodes.BAD_REQUEST).json({
         success: false,
-        message: "ID do cliente inválido.",
+        message: "Contribuinte inválido.",
       });
     }
 
     const pool = await sql.connect(config);
 
     const clienteResultado = await pool.request().query(`
-        SELECT CID FROM Cliente WHERE CID = '${clienteId}'
+        SELECT CID FROM Cliente WHERE Contribuinte = '${contribuinte}'
     `);
 
     // Verifica se o cliente existe
@@ -131,7 +131,7 @@ const RemoveClient = async (req, res) => {
     }
 
     const resultado = await pool.request().query(`
-        DELETE FROM Cliente WHERE CID = ${clienteId}
+        DELETE FROM Cliente WHERE Contribuinte = ${contribuinte}
     `);
 
     if (resultado.rowsAffected[0] > 0) {
