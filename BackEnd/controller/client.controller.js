@@ -21,6 +21,13 @@ const AddClient = async (req, res, next) => {
 
     const { nome, contribuinte, contacto, tipoContacto } = req.body;
 
+    if (!nome || !contribuinte || !contacto || !tipoContacto) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        message: "Preencha os campos.",
+      });
+    }
+
     const pool = await sql.connect(config);
 
     // Encontrar o cliente com base no contribuinte
@@ -29,8 +36,8 @@ const AddClient = async (req, res, next) => {
     `);
 
     // Verifica se o cliente existe
-    if (clienteResultado.recordset.length !== 0) {
-      return res.status(StatusCodes.NOT_FOUND).json({
+    if (clienteResultado.recordset.length > 0) {
+      return res.status(StatusCodes.CONFLICT).json({
         success: false,
         message: "Cliente já existe.",
       });
@@ -49,21 +56,21 @@ const AddClient = async (req, res, next) => {
 
     const tipoContactoId = tipoContactoResultado.recordset[0].TipoContactoID;
 
-    // Criar contacto
-
-    const resultado = await pool
+    const clienteInserido = await pool
       .request()
       .input("Nome", sql.VarChar, nome)
       .input("Contribuinte", sql.Int, contribuinte).query(`
     INSERT INTO Cliente (Nome, Contribuinte)
     VALUES (@Nome, @Contribuinte)
+    SELECT SCOPE_IDENTITY() AS CID;
   `);
 
-    const clienteId = clienteResultado.recordset[0].CID;
+    const clienteId = clienteInserido.recordset[0].CID;
 
-    const criarContacto = await pool
+    // Insere contacto
+    await pool
       .request()
-      .input("Contacto", sql.Int || sql.VarChar, contacto)
+      .input("Contacto", sql.Int, contacto)
       .input("TipoContactoTipoContactoID", sql.Int, tipoContactoId)
       .input("ClienteCID", sql.Int, clienteId).query(`
     INSERT INTO Contacto (Contacto, TipoContactoTipoContactoID, ClienteCID)
@@ -71,14 +78,17 @@ const AddClient = async (req, res, next) => {
     `);
 
     const contactoId = await pool.request().query(`
-        SELECT ContactoId FROM Contacto WHERE ClienteCID = ${clienteId}`);
+        SELECT TOP 1 ContactoId FROM Contacto WHERE ClienteCID = ${clienteId}`);
 
-    resultado = await pool.request().input("ContactoID", sql.Int, contactoId)
-      .query(`
-            UPDATE Cliente
-            SET ContactoID = @ContactoId
-            WHERE CID = ${clienteId}     
-        `);
+    const contactoIdFinal = contactoId.recordset[0].ContactoId;
+
+    const resultado = await pool
+      .request()
+      .input("ContactoContactoID", sql.Int, contactoIdFinal).query(`
+      UPDATE Cliente
+      SET ContactoContactoID = @ContactoContactoID
+      WHERE CID = ${clienteId}     
+  `);
 
     if (resultado.rowsAffected[0] > 0) {
       res.status(StatusCodes.CREATED).json({
