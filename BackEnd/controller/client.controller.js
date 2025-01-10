@@ -130,6 +130,20 @@ const RemoveClient = async (req, res) => {
       });
     }
 
+    const clienteId = clienteResultado.recordset[0].CID;
+
+    await pool.request().query(`
+      DELETE FROM Abastecimento WHERE VeiculoVeiculoID IN (SELECT VeiculoID FROM Veiculo WHERE ClienteCID = ${clienteId})
+    `);
+    
+    await pool.request().query(`
+      DELETE FROM OutroServico WHERE VeiculoVeiculoID IN (SELECT VeiculoID FROM Veiculo WHERE ClienteCID = ${clienteId})
+    `);
+
+    await pool.request().query(`
+      DELETE FROM Contacto WHERE ClienteCID = ${clienteId}
+    `);
+
     const resultado = await pool.request().query(`
         DELETE FROM Cliente WHERE Contribuinte = ${contribuinte}
     `);

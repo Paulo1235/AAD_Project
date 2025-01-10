@@ -39,6 +39,17 @@ const AddVehicle = async (req, res, next) => {
     // Extrai o CID (id do cliente)
     const clienteId = clienteResultado.recordset[0].CID;
 
+    const veiculoResultado = await pool.request().query(`
+      SELECT VeiculoID FROM Veiculo WHERE Matricula = '${matricula}'
+    `);
+
+    if(veiculoResultado.recordset.length > 0) {
+      return res.status(StatusCodes.CONFLICT).json({
+        success: false,
+        message: "Veículo já existe.",
+      });
+    }
+
     // Encontrar o cliente com base na descrição
     const tipoCombustivelResultado = await pool.request().query(`
         SELECT TCID FROM TipoCombustivel WHERE Descricao = '${descricao}'
@@ -82,19 +93,19 @@ const AddVehicle = async (req, res, next) => {
 
 const RemoveVehicle = async (req, res) => {
   try {
-    const { veiculoId } = req.body;
+    const { matricula } = req.body;
 
-    if (!veiculoId || isNaN(veiculoId)) {
+    if (!matricula) {
       return res.status(StatusCodes.BAD_REQUEST).json({
         success: false,
-        message: "ID do veiculo inválido.",
+        message: "Matrícula inválido.",
       });
     }
 
     const pool = await sql.connect(config);
 
     const veiculoResultado = await pool.request().query(`
-        SELECT VeiculoID FROM Veiculo WHERE VeiculoID = '${veiculoId}'
+        SELECT VeiculoID FROM Veiculo WHERE Matricula = '${matricula}'
     `);
 
     // Verifica se o veículo existe
@@ -104,6 +115,17 @@ const RemoveVehicle = async (req, res) => {
         message: "Veículo não existe.",
       });
     }
+
+    const veiculoId = veiculoResultado.recordset[0].VeiculoID;
+
+    await pool.request().query(`
+      DELETE FROM Abastecimento WHERE VeiculoVeiculoID = ${veiculoId}
+    `);
+    
+    await pool.request().query(`
+      DELETE FROM OutroServico WHERE VeiculoVeiculoID = ${veiculoId}
+    `);
+    
 
     const resultado = await pool.request().query(`
         DELETE FROM Veiculo WHERE VeiculoID = ${veiculoId}
@@ -240,7 +262,6 @@ const GetVehicle = async (req, res) => {
       });
     }
 
-    // Conecta ao banco de dados
     const pool = await sql.connect(config);
 
     const veiculoResultado = await pool.request()

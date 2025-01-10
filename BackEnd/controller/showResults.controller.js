@@ -37,7 +37,7 @@ const CreateStoredProcedure = async (req, res, next) => {
 
     await pool.request().query(queryCriarProcedure);
 
-    const resultado = await pool.request().execute("dbo.ObterDados");
+    const resultado = await pool.request().execute("ObterDados");
 
     if (resultado.recordset.length === 0) {
       return res.status(StatusCodes.NOT_FOUND).json({
