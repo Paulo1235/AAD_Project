@@ -218,12 +218,6 @@
         });
       });
 
-      document
-        .getElementById("dropdownButton1")
-        .addEventListener("click", function () {
-          console.log("Dropdown clicado");
-        });
-
       $(document).ready(function () {
         $("#encontrarVeiculo").click(function () {
           const matriculaVeiculo = $("#procuraMatricula").val();
@@ -290,8 +284,6 @@
               $("#dropdownButton1").text("Tipo de Combustível");
             },
             error: function (xhr, status, error) {
-
-              // Santo ChatGPT
               const errorMessage =
                 xhr.responseJSON && xhr.responseJSON.message
                   ? xhr.responseJSON.message

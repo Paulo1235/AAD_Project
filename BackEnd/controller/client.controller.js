@@ -135,7 +135,7 @@ const RemoveClient = async (req, res) => {
     await pool.request().query(`
       DELETE FROM Abastecimento WHERE VeiculoVeiculoID IN (SELECT VeiculoID FROM Veiculo WHERE ClienteCID = ${clienteId})
     `);
-    
+
     await pool.request().query(`
       DELETE FROM OutroServico WHERE VeiculoVeiculoID IN (SELECT VeiculoID FROM Veiculo WHERE ClienteCID = ${clienteId})
     `);
@@ -163,16 +163,15 @@ const RemoveClient = async (req, res) => {
   }
 };
 
-
 const UpdateClient = async (req, res, next) => {
   try {
     console.log("Body:", req.body);
 
-    const { nome, contribuinteA, contribuinte, contacto, tipoContacto } = req.body;
+    const { nome, contribuinteA, contribuinte, contacto, tipoContacto } =
+      req.body;
 
     const pool = await sql.connect(config);
 
-    // Encontrar o cliente com base no contribuinte
     const clienteResultado = await pool.request().query(`
       UPDATE Cliente
       SET 
@@ -182,13 +181,13 @@ const UpdateClient = async (req, res, next) => {
           Contribuinte = '${contribuinteA}'
   `);
 
-  const contactoResultado = await pool.request().query(`
+    const contactoResultado = await pool.request().query(`
     UPDATE Contacto
       SET 
           Contacto = '${contacto}'
       WHERE 
           ContactoID = (
-              SELECT ContactoContactoID
+              SELECT TOP 1 ContactoContactoID
               FROM Cliente
               WHERE Contribuinte = '${contribuinte}'
           );
@@ -200,66 +199,126 @@ const UpdateClient = async (req, res, next) => {
           DescContacto = '${tipoContacto}'
       WHERE 
           TipoContactoID = (
-              SELECT TipoContactoTipoContactoID
+              SELECT TOP 1 TipoContactoTipoContactoID
               FROM Contacto
               WHERE ContactoID = (
-                  SELECT ContactoContactoID
+                  SELECT TOP 1 ContactoContactoID
                   FROM Cliente
                   WHERE Contribuinte = '${contribuinte}'
               )
           );
-
       `);
 
-    // Verifica se o cliente existe
-    if (clienteResultado.recordset.length !== 0) {
-      return res.status(StatusCodes.NOT_FOUND).json({
-        success: false,
-        message: "Erro ao atualizar.",
-      });
-    }
-
     if (clienteResultado.rowsAffected[0] > 0) {
-      res.status(StatusCodes.CREATED).json({
+      return res.status(StatusCodes.CREATED).json({
         success: true,
         message: "Cliente atualizado.",
       });
     }
 
-    if (contactoResultado.recordset.length !== 0) {
-      return res.status(StatusCodes.NOT_FOUND).json({
-        success: false,
-        message: "Erro ao atualizar.",
-      });
-    }
-
     if (contactoResultado.rowsAffected[0] > 0) {
-      res.status(StatusCodes.CREATED).json({
+      return res.status(StatusCodes.CREATED).json({
         success: true,
         message: "Contacto atualizado.",
       });
     }
 
-    if (tipoContactoResultado.recordset.length !== 0) {
-      return res.status(StatusCodes.NOT_FOUND).json({
-        success: false,
-        message: "Erro ao atualizar.",
-      });
-    }
-
     if (tipoContactoResultado.rowsAffected[0] > 0) {
-      res.status(StatusCodes.CREATED).json({
+      return res.status(StatusCodes.CREATED).json({
         success: true,
         message: "TipoContacto atualizado.",
       });
     }
   } catch (error) {
-    console.error("Erro ao atualizado cliente:", error.message);
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+    console.error("Erro ao atualizar cliente:", error.message);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: error.message,
     });
   }
 };
 
-module.exports = { AddClient, RemoveClient, UpdateClient };
+const GetClient = async (req, res) => {
+  try {
+    const { contribuinteCliente } = req.params;
+
+    if (!contribuinteCliente) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        message: "O contribuinte do cliente é obrigatório.",
+      });
+    }
+
+    const pool = await sql.connect(config);
+
+    const clienteResultado = await pool
+      .request()
+      .input("Contribuinte", sql.Int, contribuinteCliente).query(`
+        SELECT CID, Nome, Contribuinte, ContactoContactoID 
+        FROM Cliente
+        WHERE Contribuinte = @Contribuinte
+      `);
+
+    if (clienteResultado.recordset.length === 0) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: "Cliente não encontrado.",
+      });
+    }
+
+    const cliente = clienteResultado.recordset[0];
+
+    const contactoResultado = await pool
+      .request()
+      .input("ContactoContactoID", sql.Int, cliente.ContactoContactoID).query(`
+        SELECT ContactoID, Contacto, TipoContactoTipoContactoID 
+        FROM Contacto
+        WHERE ContactoID = @ContactoContactoID
+      `);
+
+    if (contactoResultado.recordset.length === 0) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: "Contacto não encontrado.",
+      });
+    }
+
+    const contacto = contactoResultado.recordset[0];
+
+    const tipoContactoResultado = await pool.request()
+      .input("TipoContactoTipoContactoID", sql.Int, contacto.TipoContactoTipoContactoID)
+      .query(`
+        SELECT DescContacto
+        FROM TipoContacto
+        WHERE TipoContactoID = @TipoContactoTipoContactoID
+      `);
+
+    if (tipoContactoResultado.recordset.length === 0) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: "Tipo de contacto não encontrado.",
+      });
+    }
+
+    const tipoContacto = tipoContactoResultado.recordset[0];
+
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      data: {
+        CID: cliente.CID,
+        Nome: cliente.Nome,
+        Contribuinte: cliente.Contribuinte,
+        Contacto: contacto.Contacto,
+        TipoContacto: tipoContacto.DescContacto,
+      },
+    });
+  } catch (error) {
+    console.error("Erro ao obter os dados do cliente:", error.message);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+module.exports = { AddClient, RemoveClient, UpdateClient, GetClient };

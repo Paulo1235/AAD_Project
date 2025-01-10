@@ -1,146 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
     <title>HyperFuel</title>
-    <link rel="stylesheet" href="../style.css">
-     <div id="navbar"></div>
-</head>
-<body>
-    <div class="navbar navbar-expand-lg fixed-top" style="background-color: rgba(0, 0, 0, 0.8); ">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="../index.html">HyperFuel</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto" style="color: white;">
-                    <li class="nav-item">
-                        <a class="nav-link" href="../addOtherService.html">Serviços</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../addRefuel.html">Abastecimento</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../addVehicle.html">Veiculo</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../addClient.html">Cliente</a>
-                    </li>
-                </ul>
-            </div>
+    <link rel="stylesheet" href="../style.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <div id="navbar"></div>
+  </head>
+  <body>
+    <div
+      class="navbar navbar-expand-lg fixed-top"
+      style="background-color: rgba(0, 0, 0, 0.8)"
+    >
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">HyperFuel</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto" style="color: white">
+            <li class="nav-item">
+              <a class="nav-link" href="../addOtherService.html">Serviços</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../addRefuel.html">Abastecimento</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../addVehicle.html">Veículo</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../addClient.html">Cliente</a>
+            </li>
+          </ul>
         </div>
+      </div>
     </div>
     <div class="container">
-        <div class="row align-items-start">
-            <div class="col"></div>
-            <div class="col-12 col-md-8" style="max-width: 700px;">
-                <h1 class="pt-5 text-center mb-5" style="color: white; font-weight: bold; margin-top: -120px;">HyperFuel - Atualizar Cliente</h1>
-                <form action="">
-                    <div class="mb-3" style="max-width: 500px; margin: 0 auto;">
-                        <div class="mb-3">
-                            <input type="number" class="form-control mb-3" id="form-id" placeholder="Contribuinte para atualizar">
-                        </div>
-                        <input type="text" class="form-control mb-3" id="form-nome" placeholder="Nome Completo">
-                        <div class="mb-3">
-                            <input type="number" class="form-control mb-3" id="form-contribuinte" placeholder="Contribuinte">
-                        </div>
-                        <div class="input-group mb-3">
-                            <button id="dropdownButton" class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border-color: #2f662f;color: #ffffff;background-color: #5cb85c;">Tipo de Contacto</button>
-                            <ul class="dropdown-menu" id="dropdownMenu">
-                                <li><a class="dropdown-item" id="a" href="#" data-value="Email">Email</a></li>
-                                <li><a class="dropdown-item" id="a" href="#" data-value="Telefone Fixo">Telefone Fixo</a></li>
-                                <li><a class="dropdown-item" id="a" href="#" data-value="Telemóvel">Telemóvel</a></li>
-                                <li><a class="dropdown-item" id="a" href="#" data-value="WhatsApp">WhatsApp</a></li>
-                                <li><a class="dropdown-item" id="a" href="#" data-value="Fax">Fax</a></li>
-                                <li><a class="dropdown-item" id="a" href="#" data-value="Carta">Carta</a></li>
-                                <li><a class="dropdown-item" id="a" href="#" data-value="Telegram">Telegram</a></li>
-                                <li><a class="dropdown-item" id="a" href="#" data-value="LinkedIn">LinkedIn</a></li>
-                                <li><a class="dropdown-item" id="a" href="#" data-value="Skype">Skype</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#" data-value="Outro">Outro</a></li>
-                            </ul>
-                            <input type="text" class="form-control" aria-label="Text input with dropdown button">
-                        </div>
-                        <div class="d-flex justify-content-start align-items-center mb-3"">
-                            <button id="toggleButton" class="btn btn-outline-secondary" style="border-color: #2f662f;color: #ffffff;background-color: #5cb85c; width: 35%; height: 15%; font-size: 100%; font-weight:500;">
-                                Adicionar Veiculo
-                            </button>
-                        </div>
-                        <div id="hiddenDiv" class="d-none mb-3" style="opacity: 0.90;">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Formulário de Veículo</h5>
-                                    <form>
-                                        <div class="mb-3">
-                                            <label for="vehiclePlate" class="form-label">Matricula do Veículo</label>
-                                            <input type="text" class="form-control" id="vehiclePlate" placeholder="00-AA-00">
-                                        </div>
-                                        <button id="dropdownButton1" class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border-color: #2f662f;color: #ffffff;background-color: #5cb85c;">Tipo de Combustível</button>
-                                        <ul class="dropdown-menu" id="dropdownMenu">
-                                            <li><a class="dropdown-item" id="a1" href="#" data-value="Metano">Metano</a></li>
-                                            <li><a class="dropdown-item" id="a1" href="#" data-value="Gasolina Aditivada">Gasolina Aditivada</a></li>
-                                            <li><a class="dropdown-item" id="a1" href="#" data-value="Biodiesel">Biodiesel</a></li>
-                                            <li><a class="dropdown-item" id="a1" href="#" data-value="Diesel Premium">Diesel Premium</a></li>
-                                            <li><a class="dropdown-item" id="a1" href="#" data-value="Etanol">Etanol</a></li>
-                                            <li><a class="dropdown-item" id="a1" href="#" data-value="Hidrogenio">Hidrogénio</a></li>
-                                            <li><a class="dropdown-item" id="a1" href="#" data-value="Eletrico">Elétrico</a></li>
-                                            <li><a class="dropdown-item" id="a1" href="#" data-value="Gasoleo">Gasóleo</a></li>
-                                            <li><a class="dropdown-item" id="a1" href="#" data-value="GPL">GPL</a></li>
-                                            <li><a class="dropdown-item" id="a1" href="#" data-value="Gasolina">Gasolina</a></li>
-                                        </ul>
-                                        <div class="d-flex justify-content-end align-items-center mb-3">
-                                            <button type="submit" class="btn btn-primary" style="border-color: #2f662f;color: #ffffff;background-color: #5cb85c;">Guardar Veículo</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-end align-items-center mb-3"">
-                            <button class="btn btn-outline-secondary" style="border-color: #2f662f;color: #ffffff;background-color: #5cb85c; width: 30%; height: 15%; font-size: 170%; font-weight:600;">
-                                Atualizar
-                            </button>
-                        </div>
-                    </div>
-                </form>
+      <div class="row align-items-start">
+        <div class="col"></div>
+        <div class="col-12 col-md-8" style="max-width: 700px">
+          <h1
+            class="pt-5 text-center mb-5"
+            style="color: white; font-weight: bold"
+          >
+            HyperFuel - Atualizar Cliente
+          </h1>
+          <form id="vehicleForm">
+            <div class="mb-3">
+              <input
+                type="number"
+                class="form-control"
+                id="procuraContribuinte"
+                placeholder="Contribuinte do Cliente"
+              />
             </div>
-            <div class="col"></div>
+            <button
+              type="button"
+              id="encontrarCliente"
+              class="btn btn-outline-secondary mb-3"
+              style="
+                border-color: #2f662f;
+                color: #ffffff;
+                background-color: #5cb85c;
+                width: 100%;
+              "
+            >
+              Encontrar Cliente
+            </button>
+            <div class="mb-3">
+              <input
+                type="number"
+                class="form-control"
+                id="contribuinteDono"
+                placeholder="Contribuinte do Cliente (Atual)"
+                disabled
+              />
+            </div>
+            <div class="mb-3">
+              <input
+                type="number"
+                class="form-control"
+                id="novoContribuinte"
+                placeholder="Novo Contribuinte do Cliente (Opcional)"
+              />
+            </div>
+            <div class="mb-3">
+              <input
+                type="text"
+                class="form-control"
+                id="nomeCliente"
+                placeholder="Novo Nome do Cliente (Opcional)"
+              />
+            </div>
+            <button
+              id="dropdownButton1"
+              class="btn btn-outline-secondary dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              style="
+                border-color: #2f662f;
+                color: #ffffff;
+                background-color: #5cb85c;
+              "
+            >
+              Tipo de Contacto
+            </button>
+            <ul class="dropdown-menu" id="dropdownMenu">
+              <li>
+                <a class="dropdown-item" id="a1" href="#" data-value="Telemóvel"
+                  >Telemóvel</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  id="a1"
+                  href="#"
+                  data-value="Telefone fixo"
+                  >Telefone fixo</a
+                >
+              </li>
+            </ul>
+
+            <div class="mb-3">
+              <input
+                type="number"
+                class="form-control"
+                id="contactoCliente"
+                placeholder="Novo contacto do cliente (Opcional)"
+              />
+            </div>
+
+            <div class="d-flex justify-content-end align-items-center mb-3">
+              <button
+                type="submit"
+                class="btn btn-outline-secondary"
+                style="
+                  border-color: #2f662f;
+                  color: #ffffff;
+                  background-color: #5cb85c;
+                  width: 30%;
+                  height: 15%;
+                  font-size: 170%;
+                  font-weight: 600;
+                "
+              >
+                Atualizar
+              </button>
+            </div>
+          </form>
         </div>
+        <div class="col"></div>
+      </div>
     </div>
-    <script>
-        document.querySelectorAll('#a').forEach(item => {
-            item.addEventListener('click', function (e) {
-                e.preventDefault();
-                const selectedText = this.getAttribute('data-value');
-                document.getElementById('dropdownButton').textContent = selectedText;
-            });
-        });
-    </script>
-    <script>
-        document.querySelectorAll('#a1').forEach(item => {
-            item.addEventListener('click', function (e) {
-                e.preventDefault();
-                const selectedText = this.getAttribute('data-value');
-                document.getElementById('dropdownButton1').textContent = selectedText;
-            });
-        });
-    </script>
-    <script>
-        const toggleButton = document.getElementById('toggleButton');
-        const hiddenDiv = document.getElementById('hiddenDiv');
 
-        // Adiciona um evento de clique ao botão
-        toggleButton.addEventListener('click', function (e) {
-            // Impede o comportamento padrão (refresh da página)
-            e.preventDefault();
-
-            // Alterna entre d-none (oculto) e d-block (visível)
-            hiddenDiv.classList.toggle('d-none');
-            hiddenDiv.classList.toggle('d-block');
+    <script>
+      document.querySelectorAll("#a1").forEach((item) => {
+        item.addEventListener("click", function (e) {
+          e.preventDefault();
+          const selectedText = this.getAttribute("data-value");
+          document.getElementById("dropdownButton1").textContent = selectedText;
         });
+      });
+
+      $(document).ready(function () {
+        $("#encontrarCliente").click(function () {
+          const contribuinteCliente = $("#procuraContribuinte").val();
+
+          if (!contribuinteCliente) {
+            alert("O contribuinte do cliente é obrigatório!");
+            return;
+          }
+
+          $.ajax({
+            url: `http://localhost:3000/api/v1/get-client/${contribuinteCliente}`,
+            type: "GET",
+            success: function (response) {
+              if (response.success) {
+                const cliente = response.data;
+
+                $("#contribuinteDono").val(cliente.Contribuinte);
+                $("#contactoCliente").val(cliente.Contacto);
+                $("#nomeCliente").val(cliente.Nome);
+                $("#dropdownButton1").html(cliente.TipoContacto);
+              } else {
+                alert("Cliente não encontrado!");
+              }
+            },
+            error: function (xhr, status, error) {
+              console.error("Erro ao encontrar o cliente.", status, error);
+              alert("Erro ao encontrar cliente!");
+            },
+          });
+        });
+
+        $("#vehicleForm").submit(function (event) {
+          event.preventDefault();
+
+          const contribuinteA = parseInt($("#contribuinteDono").val(), 10);
+          const contribuinte = parseInt($("#novoContribuinte").val(), 10);
+          const contacto = parseInt($("#contactoCliente").val(), 10);
+          const nome = $("#nomeCliente").val();
+          const descricao = $("#dropdownButton1").html();
+
+          if (!contribuinteA) {
+            alert("O contribuinte do cliente é obrigatório!");
+            return;
+          }
+
+          const clienteDados = {
+            contribuinteA: contribuinteA,
+            contribuinte: contribuinte || undefined,
+            contacto: contacto || undefined,
+            nome: nome || undefined,
+            descricao: descricao || undefined,
+          };
+
+          console.log(clienteDados);
+
+          $.ajax({
+            url: "http://localhost:3000/api/v1/update-client",
+            type: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify(clienteDados),
+            success: function (response) {
+              console.log("Cliente atualizado.", response);
+              alert("Cliente atualizado com sucesso!");
+
+              $("#procuraContribuinte").val("");
+              $("#contactoCliente").val("");
+              $("#nomeCliente").val("");
+              $("#contribuinteDono").val("");
+              $("#dropdownButton1").text("Tipo de Contacto");
+            },
+            error: function (xhr, status, error) {
+              const errorMessage =
+                xhr.responseJSON && xhr.responseJSON.message
+                  ? xhr.responseJSON.message
+                  : `Erro ${xhr.status}: ${xhr.statusText}`;
+
+              alert(`Erro ao atualizar o cliente: ${errorMessage}`);
+            },
+          });
+        });
+      });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</body>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>
