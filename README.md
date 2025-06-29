@@ -1,9 +1,2 @@
 # AAD_Project
-Comandos:
-npm i
-npm install
-npm start
-criar ficheiro .env
-alterar os dados
-
- 
+Academic project for a course on databases. It models an automotive business and includes full database design, implementation, and user interaction.
